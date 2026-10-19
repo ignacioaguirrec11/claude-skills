@@ -61,3 +61,9 @@ Despues reiniciar Claude Code.
 
 - gstack — https://github.com/garrytan/gstack
 - n8n-skills — https://github.com/czlonkowski/n8n-skills
+
+**De claude.ai (en `claude-ai/`, solo respaldo):**
+
+- automation-specialisat
+
+Estas se sincronizan solas desde la cuenta de claude.ai, por eso el script no las instala (quedarian duplicadas). Si alguna compu no la tiene, copiarla a `~/.claude/skills/` o subirla en claude.ai > Configuracion > Skills.
