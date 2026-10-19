@@ -5,7 +5,7 @@ Mis skills de Claude Code, para instalarlas en cualquier compu.
 ## Instalar en una compu nueva
 
 ```bash
-git clone https://github.com/<usuario>/claude-skills.git
+git clone https://github.com/ignacioaguirrec11/claude-skills.git
 cd claude-skills
 ```
 
