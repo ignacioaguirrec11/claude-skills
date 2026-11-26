@@ -1,34 +1,47 @@
 ---
 name: solucion-video
-description: Crea un video vertical 100% IA para la cuenta Solucion.IA de Ignacio (Remotion + voz ElevenLabs) a partir de una idea, y lo deja en el panel Solucion.IA con textos y hashtags para TikTok, Reels, Shorts y X. Usar cuando Ignacio pide "hacé un video de...", "/solucion-video", o "hacé las ideas del panel".
+description: Crea un video vertical 100% IA para la cuenta Solucion.IA de Ignacio (Remotion + voz ElevenLabs) a partir de una idea, y lo publica en su panel de Vercel (solucion-ia.vercel.app) con textos y hashtags para TikTok, Reels, Shorts y X. Usar cuando Ignacio pide "hacé un video de...", "/solucion-video", o "hacé las ideas del panel".
 ---
 
 # Solucion.IA — de idea a video publicado en el panel
 
-Ignacio (Tucumán, Argentina) vende desarrollos a medida a negocios locales. No da la cara: los videos son 100% IA. Objetivo de cada video: que alguien con ese problema **comente la palabra clave** y Ignacio le escribe por privado.
+Ignacio (Argentina) vende soluciones de software e IA a medida. No da la cara: los videos son 100% IA. Objetivo de cada video: que alguien con ese problema piense "esto me pasa a mí exactamente" y **comente la palabra clave**; Ignacio le escribe por privado.
 
-- Proyecto: `C:\Users\ignac\videos-ia` (Remotion 4, React). Leé `src/Turnos.tsx` y `src/Catalogo.tsx` como referencia de nivel antes de escribir uno nuevo.
-- Panel: https://claude.ai/artifact/1ZJJ2KDH6gLh7qv8RGegg2 (colecciones `videos` e `ideas` vía la herramienta ArtifactData; videos como assets del artifact).
-- Clave ElevenLabs: `~/.elevenlabs-key` (plan Starter, 40k caracteres/mes; un video gasta ~400).
+- Videos: `C:\Users\ignac\videos-ia` (Remotion 4, React). Leé `src/Bot.tsx` y `src/Informes.tsx` como referencia de nivel antes de escribir uno nuevo.
+- Panel: https://solucion-ia.vercel.app — repo local `C:\Users\ignac\solucion-ia-panel` (GitHub privado `solucion-ia-panel`, proyecto Vercel `solucion-ia`). Videos en `public/videos/<id>.mp4`, textos en `public/data/videos.json`, ideas en Vercel Blob vía `/api/ideas`.
+- Clave del panel: `~/.solucion-panel-key` (header `x-panel-key`). Clave ElevenLabs: `~/.elevenlabs-key` (Starter, 40k caracteres/mes; un video gasta ~400).
 
 ## 0. Entrada
 - Idea suelta en el mensaje → usarla.
-- "hacé las ideas del panel" → `ArtifactData list` de `ideas`, tomar las de `estado: "nueva"`, ponerlas `en-proceso` (update con `if_version`) y hacer un video por idea. Al terminar, `hecha`.
+- "hacé las ideas del panel" → leer las nuevas:
+  ```
+  curl -s -H "x-panel-key: $(cat ~/.solucion-panel-key)" "https://solucion-ia.vercel.app/api/ideas?estado=nueva"
+  ```
+  Las ideas generadas traen `tipo` (solucion|proceso), `rubro`, `titulo`, `gancho`, `problema`, `solucion`, `escenas` (5 acciones visuales sugeridas) y `palabra`. Marcar cada una `en-proceso` y al terminar `hecha`:
+  ```
+  curl -s -X PATCH -H "x-panel-key: $(cat ~/.solucion-panel-key)" -H "content-type: application/json" -d '{"id":"<id>","estado":"hecha"}' https://solucion-ia.vercel.app/api/ideas
+  ```
+- Ideas tipo "proceso" (detrás de escena de cómo se crea una solución con IA): mismo formato de 5 escenas, mostrando idea → IA construyendo → sistema funcionando → antes/después.
 
 ## 1. Guion (5 escenas, 55–65 palabras en total)
 `src/data/<id>.script.json` = `{"id": "<id>", "scenes": [{"vo": "..."}, ...]}` y `src/data/<id>.timing.json` = `{"audio": false, "words": []}`.
 1. Gancho: el dolor del cliente como pregunta, en la primera palabra (≤ 2 s).
 2. Agravante concreto (número, escena real).
-3. La solución que Ignacio arma ("Te armo…" / "Armé…").
-4. El beneficio que se ve en el celu.
-5. Prueba real (sin lugar) + CTA: "Comentá PALABRA y te paso la info." La PALABRA en mayúsculas, una sola, del rubro.
-Reglas: español rioplatense, voseo, frases cortas. **No** poner usuario/handle de cuenta en el video. **Nunca nombrar Tucumán ni ningún lugar** (ni en voz, ni en pantalla, ni en textos/hashtags): la prueba se dice por rubro ("ya lo usa un estudio de pilates"). **Solo afirmar lo que es cierto** (ver proyectos abajo); Lancer es una propuesta, no un cliente. Nada de emojis dentro del video.
+3. La solución ("Te armo…").
+4. El beneficio que se ve en el celu o la pantalla.
+5. Resumen de la solución en 3 beneficios cortos + CTA: "Comentá PALABRA y te paso la info." La PALABRA en mayúsculas, una sola, del rubro.
+Reglas:
+- **Nunca ejemplos ni pruebas de clientes** ("ya lo usa un estudio de…", "ya lo tienen…", "lo armé para…"): no suman, nadie lo puede verificar. Ese tiempo se usa para explicar mejor la solución.
+- **Nunca nombrar Tucumán ni ningún lugar** (voz, pantalla, textos, hashtags).
+- **No** poner usuario/handle de la cuenta en el video.
+- Español rioplatense, voseo, frases cortas. Sin emojis dentro del video. No prometer lo que no se puede cumplir.
 
 ## 2. Edición (el prompt de estilo, obligatorio)
-Proponer una acción visual por bloque y después construir la animación. Máximo 4 palabras en pantalla por escena aparte de los subtítulos (componente `Label`). Convertir las ideas en acciones y dibujar las analogías del guion literalmente. Mostrar magnitudes con escala (contadores, grillas de N elementos). Enfocar lo importante (zoom de cámara al dato clave). Conservar elementos entre escenas para que se vea cómo se transforman (morph: burbujas → horarios, fotos → tarjetas). Sincronizar cada acción clave con su palabra (`wordFrame(escena, "palabra")`). Dejar una imagen final clara en cada escena.
-- Piezas en `src/ui.tsx`: `Background`, `Label`, `Captions`, `PhoneFrame`, `WaHeader`, `Flash`, `Proof` (tarjeta "FUNCIONANDO" de la escena 5), `CommentCTA` (cierre con la palabra), `Sfx` (whoosh, pop, notif, ding, cash, error, typing, impact, drop, swipe), `Soundtrack` (voz + música `beat1`).
-- Cada acción clave lleva su efecto de sonido. Escena 1 abre con `impact` en el frame 0.
-- Variar la metáfora visual entre videos. Ya usadas: cuaderno + 47 mensajes (turnos), pared de 50 "¿precio?" (catálogo), reloj 2 AM + Zzz (bot), búsqueda sin resultado + preguntas que se vuelven bloques (página), Excel → máquina → PDF + barra 1 tarde vs 3 s (informes), PDF sin abrir + mancuerna ¿? kg + curva 20 semanas (rutinas).
+Proponer una acción visual por bloque y después construir la animación. Máximo 4 palabras en pantalla por escena aparte de los subtítulos (componente `Label`). Convertir las ideas en acciones y dibujar las analogías del guion literalmente. Mostrar magnitudes con escala (contadores, grillas de N elementos, barras comparadas). Enfocar lo importante (zoom de cámara al dato clave). Conservar elementos entre escenas para que se vea cómo se transforman (morph: burbujas → horarios, fotos → tarjetas, PDF → app). Sincronizar cada acción clave con su palabra (`w(escena, "palabra")`). Dejar una imagen final clara en cada escena.
+- Piezas en `src/ui.tsx`: `Background`, `Label`, `Captions`, `PhoneFrame`, `WaHeader`, `Flash`, `Proof` (escena 5: kicker "TU SOLUCIÓN" + 3 beneficios sincronizados con su palabra), `CommentCTA` (cierre con la palabra), `Sfx` (whoosh, pop, notif, ding, cash, error, typing, impact, drop, swipe), `Soundtrack` (voz + música `beat1`).
+- Escena 5: `Label "Solución con IA"` + `Proof` + `CommentCTA`.
+- Cada acción clave lleva su efecto de sonido. Escena 1 abre con un sonido en el frame 0.
+- Variar la metáfora visual. Ya usadas: cuaderno + 47 mensajes (turnos), pared de 50 "¿precio?" (catálogo), reloj 2 AM + Zzz (bot), búsqueda sin resultado + preguntas que se vuelven bloques (página), Excel → máquina → PDF + barra 1 tarde vs 3 s (informes), PDF sin abrir + mancuerna ¿? kg + curva 20 semanas (rutinas).
 - Componente `src/<Nombre>.tsx` exporta `TL` y el componente; registrar en `src/Root.tsx` con id = `<id>`.
 
 ## 3. Voz, control y render
@@ -36,22 +49,18 @@ Proponer una acción visual por bloque y después construir la animación. Máxi
 cd C:\Users\ignac\videos-ia
 node tools/voice.mjs <id> D09EpJbk4um1HKSpeTSc 1.3   # Agustín AR, eleven_v3, acelerado 1.3x (Ignacio lo pidió así)
 npx tsc -p .
-npx remotion still src/index.ts <id> out/stills/<id>-<frame>.png --frame=<f> --scale=0.4   # 6–8 frames clave, mirarlos y corregir
+npx remotion still src/index.ts <id> out/s2/<id>-<frame>.png --frame=<f> --scale=0.4   # 5–8 frames clave, mirarlos y corregir
 npx remotion render src/index.ts <id> out/<id>.mp4
 ```
-Copiar a Descargas como `solucionia-NN-<id>.mp4` (NN = número correlativo; ver el mayor `n` en `videos`). Para descargas usar PowerShell `(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path`.
+Copiar a Descargas como `solucionia-NN-<id>.mp4` (NN = siguiente `n` de videos.json). PowerShell: `(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path`.
 
-## 4. Panel
-1. `Artifact publish` con `url` del panel, `asset: true`, `file_path: out/<id>.mp4` → anotar el id.
-2. `ArtifactData set` en `videos/<id>`: `{n, titulo, rubro, duracion, palabra, creado, assetId, archivo, publicado: {}, comentario, textos: {tiktok:{texto}, instagram:{texto}, youtube:{titulo, texto}, x:{texto}}}`.
-   - TikTok: gancho + 2 líneas + CTA + 5 hashtags. Reels: gancho + 3 ✅ beneficios + CTA + 5 hashtags. Shorts: título ≤ 70 caracteres con `#shorts` + descripción + 3 hashtags. X: ≤ 280 caracteres + 2 hashtags.
-   - Hashtags: mezclar 1 amplio (#emprendedores), 2-3 del nicho (#turnosonline…) y 1 de formato/venta. Sin hashtags de lugar. No hay datos de tendencias en vivo: decirlo si Ignacio pregunta.
-3. Responder corto: link del panel, ruta en Descargas, qué palabra clave lleva.
+## 4. Panel (Vercel)
+1. Agregar el video a `C:\Users\ignac\solucion-ia-panel\public\data\videos.json`: `{id, n, titulo, rubro, duracion: "", palabra, creado, comentario, textos: {tiktok:{texto}, instagram:{texto}, youtube:{titulo, texto}, x:{texto}}}`.
+   - TikTok: gancho + 2 líneas + CTA + 5 hashtags. Reels: gancho + 3-4 ✅ beneficios + CTA + 5 hashtags. Shorts: título ≤ 70 caracteres con `#shorts` + descripción + 3 hashtags. X: ≤ 280 caracteres + 2 hashtags.
+   - Hashtags: 1 amplio (#emprendedores), 2-3 del nicho y 1 de formato/venta. Sin lugares. No hay datos de tendencias en vivo: decirlo si Ignacio pregunta.
+2. `node tools/sync-panel.mjs <id>` (copia el mp4 y pone duración y nombre de archivo).
+3. En el panel: `git add -A && git commit -m "Video NN: <id>" && git push` y `vercel deploy --prod --yes`.
+4. Responder corto: link del panel, ruta en Descargas, palabra clave.
 
-## Proyectos reales de Ignacio (lo único que se puede afirmar)
-- Cagliari Pilates (Tucumán): turnos online sin registro, 9 lugares por clase, turno fijo mensual, panel admin en el celu (asistencia, caja, deudas) + bot de WhatsApp con IA (n8n) que responde precios y horarios y lee feriados del panel.
-- Catálogos con pedido por WhatsApp: Almacén de Pollos (Tucumán), Catálogo El Kikin, La Reserva Vintage (ropa).
-- Páginas de negocios: Houston Barber (estado "abierto ahora", catálogo de cortes), Rust Herrería, Cabalgatas Tucumán.
-- Sistema de informes de suelos (EEAOC): Excel → informe PDF automático.
-- Apps de seguimiento de entrenamiento (rutinas de 20 semanas).
-- Lancer (tienda de iPhones): **propuesta**, no cliente.
+## Lo que Ignacio sabe construir (para ofrecer, no para citar como prueba)
+Turnos y reservas con panel admin; catálogos con pedido por WhatsApp; bots de WhatsApp con IA (n8n); páginas web para negocios; informes automáticos Excel → PDF; apps de seguimiento (entrenamiento, clientes); automatizaciones.
