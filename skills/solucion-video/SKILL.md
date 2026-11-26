@@ -8,18 +8,18 @@ description: Crea un video vertical 100% IA para la cuenta Solucion.IA de Ignaci
 Ignacio (Argentina) vende soluciones de software e IA a medida. No da la cara: los videos son 100% IA. Objetivo de cada video: que alguien con ese problema piense "esto me pasa a mí exactamente" y **comente la palabra clave**; Ignacio le escribe por privado.
 
 - Videos: `C:\Users\ignac\videos-ia` (Remotion 4, React). Leé `src/Bot.tsx` y `src/Informes.tsx` como referencia de nivel antes de escribir uno nuevo.
-- Panel: https://solucion-ia.vercel.app — repo local `C:\Users\ignac\solucion-ia-panel` (GitHub privado `solucion-ia-panel`, proyecto Vercel `solucion-ia`). Videos en `public/videos/<id>.mp4`, textos en `public/data/videos.json`, ideas en Vercel Blob vía `/api/ideas`.
-- Clave del panel: `~/.solucion-panel-key` (header `x-panel-key`). Clave ElevenLabs: `~/.elevenlabs-key` (Starter, 40k caracteres/mes; un video gasta ~400).
+- Panel: https://solucion-ia.vercel.app — carpeta `C:\Users\ignac\solucion-ia-panel` (proyecto Vercel `solucion-ia`, se publica con la CLI, sin Git). Videos en `public/videos/<id>.mp4`, textos en `public/data/videos.json`, ideas en Vercel Blob vía `/api/ideas`.
+- El panel no tiene clave (Ignacio lo pidió). Clave ElevenLabs: `~/.elevenlabs-key` (Starter, 40k caracteres/mes; un video gasta ~400).
 
 ## 0. Entrada
 - Idea suelta en el mensaje → usarla.
 - "hacé las ideas del panel" → leer las nuevas:
   ```
-  curl -s -H "x-panel-key: $(cat ~/.solucion-panel-key)" "https://solucion-ia.vercel.app/api/ideas?estado=nueva"
+  curl -s "https://solucion-ia.vercel.app/api/ideas?estado=nueva"
   ```
   Las ideas generadas traen `tipo` (solucion|proceso), `rubro`, `titulo`, `gancho`, `problema`, `solucion`, `escenas` (5 acciones visuales sugeridas) y `palabra`. Marcar cada una `en-proceso` y al terminar `hecha`:
   ```
-  curl -s -X PATCH -H "x-panel-key: $(cat ~/.solucion-panel-key)" -H "content-type: application/json" -d '{"id":"<id>","estado":"hecha"}' https://solucion-ia.vercel.app/api/ideas
+  curl -s -X PATCH -H "content-type: application/json" -d '{"id":"<id>","estado":"hecha"}' https://solucion-ia.vercel.app/api/ideas
   ```
 - Ideas tipo "proceso" (detrás de escena de cómo se crea una solución con IA): mismo formato de 5 escenas, mostrando idea → IA construyendo → sistema funcionando → antes/después.
 
@@ -59,7 +59,7 @@ Copiar a Descargas como `solucionia-NN-<id>.mp4` (NN = siguiente `n` de videos.j
    - TikTok: gancho + 2 líneas + CTA + 5 hashtags. Reels: gancho + 3-4 ✅ beneficios + CTA + 5 hashtags. Shorts: título ≤ 70 caracteres con `#shorts` + descripción + 3 hashtags. X: ≤ 280 caracteres + 2 hashtags.
    - Hashtags: 1 amplio (#emprendedores), 2-3 del nicho y 1 de formato/venta. Sin lugares. No hay datos de tendencias en vivo: decirlo si Ignacio pregunta.
 2. `node tools/sync-panel.mjs <id>` (copia el mp4 y pone duración y nombre de archivo).
-3. En el panel: `git add -A && git commit -m "Video NN: <id>" && git push` y `vercel deploy --prod --yes`.
+3. En `C:\Users\ignac\solucion-ia-panel`: `vercel deploy --prod --yes`. **No subir el panel a Git/GitHub** (Ignacio no quiere).
 4. Responder corto: link del panel, ruta en Descargas, palabra clave.
 
 ## Lo que Ignacio sabe construir (para ofrecer, no para citar como prueba)
