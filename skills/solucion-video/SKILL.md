@@ -21,14 +21,14 @@ Ignacio (Tucumán, Argentina) vende desarrollos a medida a negocios locales. No 
 2. Agravante concreto (número, escena real).
 3. La solución que Ignacio arma ("Te armo…" / "Armé…").
 4. El beneficio que se ve en el celu.
-5. Prueba real + CTA: "Comentá PALABRA…". La PALABRA en mayúsculas, una sola, del rubro.
-Reglas: español rioplatense, voseo, frases cortas. **No** poner usuario/handle de cuenta en el video. **Solo afirmar lo que es cierto** (ver proyectos abajo); Lancer es una propuesta, no un cliente. Nada de emojis dentro del video.
+5. Prueba real (sin lugar) + CTA: "Comentá PALABRA y te paso la info." La PALABRA en mayúsculas, una sola, del rubro.
+Reglas: español rioplatense, voseo, frases cortas. **No** poner usuario/handle de cuenta en el video. **Nunca nombrar Tucumán ni ningún lugar** (ni en voz, ni en pantalla, ni en textos/hashtags): la prueba se dice por rubro ("ya lo usa un estudio de pilates"). **Solo afirmar lo que es cierto** (ver proyectos abajo); Lancer es una propuesta, no un cliente. Nada de emojis dentro del video.
 
 ## 2. Edición (el prompt de estilo, obligatorio)
 Proponer una acción visual por bloque y después construir la animación. Máximo 4 palabras en pantalla por escena aparte de los subtítulos (componente `Label`). Convertir las ideas en acciones y dibujar las analogías del guion literalmente. Mostrar magnitudes con escala (contadores, grillas de N elementos). Enfocar lo importante (zoom de cámara al dato clave). Conservar elementos entre escenas para que se vea cómo se transforman (morph: burbujas → horarios, fotos → tarjetas). Sincronizar cada acción clave con su palabra (`wordFrame(escena, "palabra")`). Dejar una imagen final clara en cada escena.
-- Piezas en `src/ui.tsx`: `Background`, `Label`, `Captions`, `PhoneFrame`, `CommentCTA` (cierre con la palabra), `Sfx` (whoosh, pop, notif, ding, cash, error, typing, impact, drop, swipe), `Soundtrack` (voz + música `beat1`).
+- Piezas en `src/ui.tsx`: `Background`, `Label`, `Captions`, `PhoneFrame`, `WaHeader`, `Flash`, `Proof` (tarjeta "FUNCIONANDO" de la escena 5), `CommentCTA` (cierre con la palabra), `Sfx` (whoosh, pop, notif, ding, cash, error, typing, impact, drop, swipe), `Soundtrack` (voz + música `beat1`).
 - Cada acción clave lleva su efecto de sonido. Escena 1 abre con `impact` en el frame 0.
-- Variar la metáfora visual entre videos (no repetir "47 mensajes" ni la pared de "¿precio?").
+- Variar la metáfora visual entre videos. Ya usadas: cuaderno + 47 mensajes (turnos), pared de 50 "¿precio?" (catálogo), reloj 2 AM + Zzz (bot), búsqueda sin resultado + preguntas que se vuelven bloques (página), Excel → máquina → PDF + barra 1 tarde vs 3 s (informes), PDF sin abrir + mancuerna ¿? kg + curva 20 semanas (rutinas).
 - Componente `src/<Nombre>.tsx` exporta `TL` y el componente; registrar en `src/Root.tsx` con id = `<id>`.
 
 ## 3. Voz, control y render
@@ -45,7 +45,7 @@ Copiar a Descargas como `solucionia-NN-<id>.mp4` (NN = número correlativo; ver 
 1. `Artifact publish` con `url` del panel, `asset: true`, `file_path: out/<id>.mp4` → anotar el id.
 2. `ArtifactData set` en `videos/<id>`: `{n, titulo, rubro, duracion, palabra, creado, assetId, archivo, publicado: {}, comentario, textos: {tiktok:{texto}, instagram:{texto}, youtube:{titulo, texto}, x:{texto}}}`.
    - TikTok: gancho + 2 líneas + CTA + 5 hashtags. Reels: gancho + 3 ✅ beneficios + CTA + 5 hashtags. Shorts: título ≤ 70 caracteres con `#shorts` + descripción + 3 hashtags. X: ≤ 280 caracteres + 2 hashtags.
-   - Hashtags: mezclar 1 amplio (#emprendedores), 2 del nicho (#turnosonline…), 1 de formato/venta y #tucuman. No hay datos de tendencias en vivo: decirlo si Ignacio pregunta.
+   - Hashtags: mezclar 1 amplio (#emprendedores), 2-3 del nicho (#turnosonline…) y 1 de formato/venta. Sin hashtags de lugar. No hay datos de tendencias en vivo: decirlo si Ignacio pregunta.
 3. Responder corto: link del panel, ruta en Descargas, qué palabra clave lleva.
 
 ## Proyectos reales de Ignacio (lo único que se puede afirmar)
