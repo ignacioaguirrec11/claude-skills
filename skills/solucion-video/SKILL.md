@@ -24,6 +24,10 @@ Ignacio (Argentina) vende soluciones de software e IA a medida. No da la cara: l
 - Ideas tipo "proceso" (detrás de escena de cómo se crea una solución con IA): mismo formato de 5 escenas, mostrando idea → IA construyendo → sistema funcionando → antes/después.
 
 ## 1. Guion (5 escenas, 55–65 palabras en total)
+Antes de escribir, cargar con la herramienta Skill:
+- **`hook-writer`**: escribir 3 ganchos para los primeros 2 segundos (el dolor como pregunta), puntuarlos con su rúbrica y quedarse con el mejor. El gancho tiene que ser verdad respecto de lo que muestra el video.
+- **`short-form-video-script`**: armar las 5 escenas con su framework WATCH (que nadie lo saltee: ritmo, nada de relleno, cierre claro). Sus reglas mandan sobre el formato salvo donde choquen con las reglas de abajo, que ganan.
+
 `src/data/<id>.script.json` = `{"id": "<id>", "scenes": [{"vo": "..."}, ...]}` y `src/data/<id>.timing.json` = `{"audio": false, "words": []}`.
 1. Gancho: el dolor del cliente como pregunta, en la primera palabra (≤ 2 s).
 2. Agravante concreto (número, escena real).
@@ -57,7 +61,8 @@ Copiar a Descargas como `solucionia-NN-<id>.mp4` (NN = siguiente `n` de videos.j
 ## 4. Panel (Vercel)
 1. Agregar el video a `C:\Users\ignac\solucion-ia-panel\public\data\videos.json`: `{id, n, titulo, rubro, duracion: "", palabra, creado, comentario, textos: {tiktok:{texto}, instagram:{texto}, youtube:{titulo, texto}, x:{texto}}}`.
    - TikTok: gancho + 2 líneas + CTA + 5 hashtags. Reels: gancho + 3-4 ✅ beneficios + CTA + 5 hashtags. Shorts: título ≤ 70 caracteres con `#shorts` + descripción + 3 hashtags. X: ≤ 280 caracteres + 2 hashtags.
-   - Hashtags: 1 amplio (#emprendedores), 2-3 del nicho y 1 de formato/venta. Sin lugares. No hay datos de tendencias en vivo: decirlo si Ignacio pregunta.
+   - Cargar **`caption-writer`** para los textos de cada red (primera línea = gancho) y **`hashtag-strategy`** + **`social-seo`** para hashtags y palabras clave: máximo 5 hashtags en Instagram (límite real), de nicho y medianos antes que gigantes, rotando sets entre videos; meter las palabras que la gente busca ("turnos online", "catálogo por WhatsApp") en la primera línea del texto, porque pesan más que los hashtags. Sin lugares. No hay datos de tendencias en vivo: decirlo si Ignacio pregunta.
+   - Comentario fijado: usar **`social-selling-and-dm`** (comentar la palabra → DM con consentimiento, nunca spam).
 2. `node tools/sync-panel.mjs <id>` (copia el mp4 y pone duración y nombre de archivo).
 3. En `C:\Users\ignac\solucion-ia-panel`: `vercel deploy --prod --yes`. **No subir el panel a Git/GitHub** (Ignacio no quiere).
 4. Responder corto: link del panel, ruta en Descargas, palabra clave.
