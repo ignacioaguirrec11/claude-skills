@@ -34,7 +34,7 @@ Antes de escribir, cargar con la herramienta Skill:
 2. Contexto / historia: por qué y cómo, el dolor contado como vivido.
 3. Tensión: agravante concreto (número, escena real).
 4. El premio: recién acá la solución y cómo funciona, en pantalla.
-5. Resumen de la solución en 3 beneficios cortos + CTA: "Comentá PALABRA y te paso la info." La PALABRA en mayúsculas, una sola, del rubro.
+5. Resumen de la solución en 3 beneficios cortos + CTA: "Si tu negocio necesita esto, comentá PALABRA y te muestro cómo quedaría en el tuyo." (nunca "te paso la info") La PALABRA en mayúsculas, una sola, del rubro.
 Reglas:
 - **Nunca ejemplos ni pruebas de clientes** ("ya lo usa un estudio de…", "ya lo tienen…", "lo armé para…"): no suman, nadie lo puede verificar. Ese tiempo se usa para explicar mejor la solución.
 - **Nunca nombrar Tucumán ni ningún lugar** (voz, pantalla, textos, hashtags).
