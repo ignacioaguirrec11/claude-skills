@@ -25,14 +25,15 @@ Ignacio (Argentina) vende soluciones de software e IA a medida. No da la cara: l
 
 ## 1. Guion (5 escenas, 55–65 palabras en total)
 Antes de escribir, cargar con la herramienta Skill:
-- **`hook-writer`**: escribir 3 ganchos para los primeros 2 segundos (el dolor como pregunta), puntuarlos con su rúbrica y quedarse con el mejor. El gancho tiene que ser verdad respecto de lo que muestra el video.
+- **`hook-writer`**: escribir 3 ganchos para los primeros 2 segundos (primicia que abre un loop, no que entrega la respuesta), puntuarlos con su rúbrica y quedarse con el mejor. El gancho tiene que ser verdad respecto de lo que muestra el video.
 - **`short-form-video-script`**: armar las 5 escenas con su framework WATCH (que nadie lo saltee: ritmo, nada de relleno, cierre claro). Sus reglas mandan sobre el formato salvo donde choquen con las reglas de abajo, que ganan.
 
 `src/data/<id>.script.json` = `{"id": "<id>", "scenes": [{"vo": "..."}, ...]}` y `src/data/<id>.timing.json` = `{"audio": false, "words": []}`.
-1. Gancho: el dolor del cliente como pregunta, en la primera palabra (≤ 2 s).
-2. Agravante concreto (número, escena real).
-3. La solución ("Te armo…").
-4. El beneficio que se ve en el celu o la pantalla.
+**Leer primero `C:\Users\ignac\videos-ia\CLAUDE.md`** (narrativa "no gastar la bala" + nivel visual de referencia); manda sobre esta sección.
+1. Primicia (≤ 2 s): promesa o hecho llamativo que abre una pregunta, sin nombrar la solución.
+2. Contexto / historia: por qué y cómo, el dolor contado como vivido.
+3. Tensión: agravante concreto (número, escena real).
+4. El premio: recién acá la solución y cómo funciona, en pantalla.
 5. Resumen de la solución en 3 beneficios cortos + CTA: "Comentá PALABRA y te paso la info." La PALABRA en mayúsculas, una sola, del rubro.
 Reglas:
 - **Nunca ejemplos ni pruebas de clientes** ("ya lo usa un estudio de…", "ya lo tienen…", "lo armé para…"): no suman, nadie lo puede verificar. Ese tiempo se usa para explicar mejor la solución.
