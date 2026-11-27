@@ -7,7 +7,7 @@ description: Crea un video vertical 100% IA para la cuenta Solucion.IA de Ignaci
 
 Ignacio (Argentina) vende soluciones de software e IA a medida. No da la cara: los videos son 100% IA. Objetivo de cada video: que alguien con ese problema piense "esto me pasa a mí exactamente" y **comente la palabra clave**; Ignacio le escribe por privado.
 
-- Videos: `C:\Users\ignac\videos-ia` (Remotion 4, React). **Estilo v2 (desde 2026-11-27):** piezas en `src/ui2.tsx` (Paper, Headlines, Card, Tag, Cursor, CommentLight) y `src/Turnos2.tsx` como referencia de nivel. El texto en pantalla son los titulares (`Headlines`), sin `Captions`. Los videos v1 (`ui.tsx`, fondo oscuro) quedan solo como archivo.
+- Videos: `C:\Users\ignac\videos-ia` (Remotion 4, React). **Estilo v2 (desde 2026-11-27):** piezas en `src/ui2.tsx` (Paper, Headlines, Card, Tag, Cursor, CommentLight) y `src/ui2b.tsx` (StatBar, ChatCard, BigNumber, LossCard, PhoneShell, FinalCTA, Scene); referencias: `Turnos2`, `Catalogo2`, `Pagina2`, `Informes2`, `Rutinas2` y `src/Turnos2.tsx` como referencia de nivel. El texto en pantalla son los titulares (`Headlines`), sin `Captions`. Los videos v1 (`ui.tsx`, fondo oscuro) quedan solo como archivo.
 - Panel: https://solucion-ia.vercel.app — carpeta `C:\Users\ignac\solucion-ia-panel` (proyecto Vercel `solucion-ia`, se publica con la CLI, sin Git). Videos en `public/videos/<id>.mp4`, textos en `public/data/videos.json`, ideas en Vercel Blob vía `/api/ideas`.
 - El panel no tiene clave (Ignacio lo pidió). Clave ElevenLabs: `~/.elevenlabs-key` (Starter, 40k caracteres/mes; un video gasta ~400).
 
@@ -59,7 +59,9 @@ npx remotion render src/index.ts <id> out/<id>.mp4
 ```
 Copiar a Descargas como `solucionia-NN-<id>.mp4` (NN = siguiente `n` de videos.json). PowerShell: `(New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path`.
 
-## 4. Panel (Vercel)
+## 4. Panel (Vercel) — siempre, sin preguntar
+Ignacio pidió (2026-11-27) que **todo video se suba al panel apenas está renderizado**, con deploy. Si es una versión nueva de un video existente, reemplaza su entrada (mismo `n`).
+
 1. Agregar el video a `C:\Users\ignac\solucion-ia-panel\public\data\videos.json`: `{id, n, titulo, rubro, duracion: "", palabra, creado, comentario, textos: {tiktok:{texto}, instagram:{texto}, youtube:{titulo, texto}, x:{texto}}}`.
    - TikTok: gancho + 2 líneas + CTA + 5 hashtags. Reels: gancho + 3-4 ✅ beneficios + CTA + 5 hashtags. Shorts: título ≤ 70 caracteres con `#shorts` + descripción + 3 hashtags. X: ≤ 280 caracteres + 2 hashtags.
    - Cargar **`caption-writer`** para los textos de cada red (primera línea = gancho) y **`hashtag-strategy`** + **`social-seo`** para hashtags y palabras clave: máximo 5 hashtags en Instagram (límite real), de nicho y medianos antes que gigantes, rotando sets entre videos; meter las palabras que la gente busca ("turnos online", "catálogo por WhatsApp") en la primera línea del texto, porque pesan más que los hashtags. Sin lugares. No hay datos de tendencias en vivo: decirlo si Ignacio pregunta.
