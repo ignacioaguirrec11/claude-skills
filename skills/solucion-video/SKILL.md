@@ -7,7 +7,7 @@ description: Crea un video vertical 100% IA para la cuenta Solucion.IA de Ignaci
 
 Ignacio (Argentina) vende soluciones de software e IA a medida. No da la cara: los videos son 100% IA. Objetivo de cada video: que alguien con ese problema piense "esto me pasa a mí exactamente" y **comente la palabra clave**; Ignacio le escribe por privado.
 
-- Videos: `C:\Users\ignac\videos-ia` (Remotion 4, React). Leé `src/Bot.tsx` y `src/Informes.tsx` como referencia de nivel antes de escribir uno nuevo.
+- Videos: `C:\Users\ignac\videos-ia` (Remotion 4, React). **Estilo v2 (desde 2026-11-27):** piezas en `src/ui2.tsx` (Paper, Headlines, Card, Tag, Cursor, CommentLight) y `src/Turnos2.tsx` como referencia de nivel. El texto en pantalla son los titulares (`Headlines`), sin `Captions`. Los videos v1 (`ui.tsx`, fondo oscuro) quedan solo como archivo.
 - Panel: https://solucion-ia.vercel.app — carpeta `C:\Users\ignac\solucion-ia-panel` (proyecto Vercel `solucion-ia`, se publica con la CLI, sin Git). Videos en `public/videos/<id>.mp4`, textos en `public/data/videos.json`, ideas en Vercel Blob vía `/api/ideas`.
 - El panel no tiene clave (Ignacio lo pidió). Clave ElevenLabs: `~/.elevenlabs-key` (Starter, 40k caracteres/mes; un video gasta ~400).
 
